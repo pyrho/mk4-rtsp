@@ -7,7 +7,7 @@ export async function capture(jobDir: string): Promise<null> {
   try {
     await access(path, constants.W_OK)
   } catch (_e) {
-    await mkdir(path)
+    await mkdir(path, { recursive: true })
   }
   return new Promise((resolve, reject) => {
     // Tell fluent-ffmpeg where it can find FFmpeg
