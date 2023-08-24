@@ -10,3 +10,4 @@ Goals
 - [ ] create time-lapse:
     - `ffmpeg -framerate 500 -pattern_type glob -i '*.png' -c:v libx264 -pix_fmt yuv420p out2.mp4`
 - [ ] take arguments (layer height etc.)
+- [ ] relay RTSP (https://github.com/phoboslab/jsmpeg)

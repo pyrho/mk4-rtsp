@@ -3,6 +3,7 @@ import ffmpegStatic from 'ffmpeg-static'
 import { access, constants, mkdir } from 'fs/promises'
 
 export async function capture(jobDir: string): Promise<null> {
+  console.info(`[${+new Date()}] Taking capture...`)
   const path = `./output/${jobDir}`
   try {
     await access(path, constants.W_OK)
@@ -31,7 +32,7 @@ export async function capture(jobDir: string): Promise<null> {
 
       // The callback that is run when FFmpeg is finished
       .on('end', () => {
-        console.log('FFmpeg has finished.')
+        console.info(`[${+new Date()}] Capture Done!`)
         return resolve(null)
       })
 
