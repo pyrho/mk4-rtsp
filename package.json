@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "dotenv": "^16.3.1",
+    "express": "^4.18.2",
     "fessonia": "^2.2.2",
     "ffmpeg-static": "^5.2.0",
     "fluent-ffmpeg": "^2.1.2",

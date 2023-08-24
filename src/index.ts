@@ -3,6 +3,7 @@ import { StatusData, getStatus } from './status.js'
 import { capture } from './capture.js'
 import { notify } from './notify.js'
 import { mergeImages } from './merge-images.js'
+import { startRelay } from './relay.js'
 
 const ONE_SECOND = 1000
 const TICK_RATE = 30 * ONE_SECOND
@@ -38,4 +39,5 @@ async function main() {
   }
 }
 
+startRelay()
 main()
