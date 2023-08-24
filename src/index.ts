@@ -19,7 +19,7 @@ async function main() {
     console.info(
       `[${+new Date()}] Printing in progress... [progress:${
         thisStatus.job.progress
-      }%,time_remaning:${(thisStatus.job.time_remaining / 60 / 60).toFixed(2)}]`,
+      }%,time_remaning:${(new Date(thisStatus.job.time_remaining * 1000).toISOString().substring(11, 11 + 8))}]`,
     )
     await capture(`${thisStatus.job.id}`)
     setTimeout(main, TICK_RATE)
