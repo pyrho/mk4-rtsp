@@ -3,7 +3,9 @@ import { StatusData, getStatus } from './status.js'
 import { capture } from './capture.js'
 import { notify } from './notify.js'
 
-const TICK_RATE = 1000 * 60
+const ONE_SECOND = 1000
+const ONE_MINUTE =ONE_SECOND * 60
+const TICK_RATE = ONE_MINUTE
 // const LAYER_HEIGHT = 0.2
 
 let lastStatus: null | StatusData = null
