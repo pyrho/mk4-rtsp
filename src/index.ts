@@ -14,9 +14,6 @@ async function main() {
   const running = thisStatus.printer.state === 'PRINTING'
   const stateHasChanged = lastStatus?.printer.state !== thisStatus.printer.state
 
-  const doCapture = true
-  if (doCapture) await capture(`${thisStatus.job.id}`)
-
   if (running) {
     lastStatus = thisStatus
     console.info(
@@ -24,6 +21,7 @@ async function main() {
         thisStatus.job.progress
       }%,time_remaning:${(thisStatus.job.time_remaining / 60 / 60).toFixed(2)}]`,
     )
+    await capture(`${thisStatus.job.id}`)
     setTimeout(main, TICK_RATE)
   }
 
