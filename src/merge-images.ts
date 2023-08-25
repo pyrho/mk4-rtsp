@@ -1,6 +1,7 @@
 import ffmpeg from 'fluent-ffmpeg'
-import { opendir } from 'node:fs/promises'
+import { opendir, readdir, unlink } from 'node:fs/promises'
 import ffmpegStatic from 'ffmpeg-static'
+import { log, tap } from './utils.js'
 
 async function getFirstFileInDir(jobDir: string): Promise<string> {
   try {
@@ -16,7 +17,7 @@ async function getFirstFileInDir(jobDir: string): Promise<string> {
 }
 
 export async function mergeImages(jobDir: string): Promise<null> {
-  console.info(`[${+new Date()}] Creating timelapse...`)
+  log('Creating timelapse...')
   // We need this hack so that we can provide the `-pattern_type` input argument
   const firstFile = await getFirstFileInDir(jobDir)
   return new Promise((resolve, reject) => {
@@ -35,13 +36,22 @@ export async function mergeImages(jobDir: string): Promise<null> {
 
       // The callback that is run when FFmpeg is finished
       .on('end', () => {
-        console.info(`[${+new Date()}] Timelapse created!`)
+        log('Timelapse created!')
         return resolve(null)
       })
 
       // The callback that is run when FFmpeg encountered an error
-      .on('error', (error) => {
+      .on('error', (error: any) => {
         return reject(error)
       })
   })
+}
+
+export async function deleteImages(jobDir: string): Promise<null> {
+  return readdir(`./output/${jobDir}`)
+    .then((entries) => entries.filter((entry) => entry.endsWith('.jpg')))
+    .then(tap((entries) => log(`Cleaning up job dir ${jobDir}, ${entries.length} files...`)))
+    .then((entries) => Promise.all(entries.map((entry) => unlink(`./output/${jobDir}/${entry}`))))
+    .then(tap(() => log('Cleanup complete!')))
+    .then(() => null)
 }

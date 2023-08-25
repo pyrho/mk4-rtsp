@@ -1,9 +1,10 @@
 import ffmpeg from 'fluent-ffmpeg'
 import ffmpegStatic from 'ffmpeg-static'
 import { access, constants, mkdir } from 'fs/promises'
+import { log } from './utils.js'
 
 export async function capture(jobDir: string): Promise<null> {
-  console.info(`[${+new Date()}] Taking capture...`)
+  log('Taking capture...')
   const path = `./output/${jobDir}`
   try {
     await access(path, constants.W_OK)
@@ -32,12 +33,12 @@ export async function capture(jobDir: string): Promise<null> {
 
       // The callback that is run when FFmpeg is finished
       .on('end', () => {
-        console.info(`[${+new Date()}] Capture Done!`)
+        log('Capture Done!')
         return resolve(null)
       })
 
       // The callback that is run when FFmpeg encountered an error
-      .on('error', (error) => {
+      .on('error', (error: any) => {
         return reject(error)
       })
   })
