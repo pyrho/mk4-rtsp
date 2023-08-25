@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue'
-const API_URL = `http://localhost:2000/list`
+const API_URL = `http://mk4-rtsp.lan:2000/list`
 const files = ref(null)
 watchEffect(async () => {
   // this effect will run immediately and then
@@ -20,7 +20,7 @@ const openInNewTab = (url: string) => {
   <ul>
     <li v-for="file in files">
       <Button
-        @click="openInNewTab(`http://localhost:2000/videos/${file}/timelapse.mp4`)"
+        @click="openInNewTab(`http://mk4-rtsp.lan:2000/videos/${file}/timelapse.mp4`)"
         :label="'Job:' + file"
         icon="pi pi-check"
         iconPos="right"

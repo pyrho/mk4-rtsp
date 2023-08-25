@@ -9,7 +9,7 @@ const feed = ref(null)
 onMounted(() => {
   if (feed.value) {
     loadPlayer({
-      url: 'ws://localhost:2000/api/stream',
+      url: 'ws://mk4-rtsp.lan:2000/api/stream',
       canvas: feed.value
     })
   }

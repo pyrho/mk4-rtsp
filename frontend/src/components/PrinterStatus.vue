@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watchEffect, type Ref } from 'vue'
-const API_URL = `http://localhost:2000/status`
+const API_URL = `http://mk4-rtsp.lan:2000/status`
 const printerStatus: Ref<null | Record<any, any>> = ref(null)
 
 watchEffect(async () => {
