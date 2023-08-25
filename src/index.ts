@@ -3,7 +3,9 @@ import { StatusData, getStatus } from './status.js'
 import { capture } from './capture.js'
 import { notify } from './notify.js'
 import { mergeImages } from './merge-images.js'
-import { startRelay } from './relay.js'
+// import { startRelay } from './relay.js'
+import express from 'express';
+import relay from 'rtsp-relay'
 
 const ONE_SECOND = 1000
 const TICK_RATE = 30 * ONE_SECOND
@@ -26,7 +28,7 @@ async function main() {
     setTimeout(main, TICK_RATE)
   }
 
-  if (!running && stateHasChanged) {
+  if (!running && stateHasChanged && lastStatus !== null) {
     console.info(`[${+new Date()}] Print done! Notifying.`)
     notify()
     await mergeImages(`${lastStatus.job.id}`)
@@ -39,5 +41,36 @@ async function main() {
   }
 }
 
-startRelay()
+// This is bad
+// startRelay()
 main()
+
+
+
+const app = express();
+const { proxy, scriptUrl } = relay(app)
+
+// the endpoint our RTSP uses
+// app.ws('/api/stream', handler);
+app.ws('/api/stream', proxy({ transport: 'tcp',
+  url: process.env.RTSP_STREAM,
+  // if your RTSP stream need credentials, include them in the URL as above
+  verbose: false,
+}));
+
+// this is an example html page to view the stream
+app.get('/', (_, res) =>
+  res.send(`
+  <canvas id='canvas'></canvas>
+
+  <script src='${scriptUrl}'></script>
+  <script>
+    loadPlayer({
+      url: 'ws://' + location.host + '/api/stream',
+      canvas: document.getElementById('canvas')
+    });
+  </script>
+`),
+);
+
+app.listen(2000);
