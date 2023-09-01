@@ -27,8 +27,12 @@ export async function mergeImages(jobDir: string): Promise<null> {
     // Run FFmpeg
     ffmpeg(firstFile)
       // Input file
+      .inputOptions('-framerate', '30')
       .inputOptions('-pattern_type', 'glob')
       .inputOptions('-i', `./output/${jobDir}/*.jpg`)
+
+      .outputOptions('-c:v', 'libx264')
+      .outputOptions('-pix_fmt', 'yuv420p')
 
       // Output file
       .saveToFile(`./output/${jobDir}/timelapse.mp4`)

@@ -10,7 +10,7 @@ import expressWs from 'express-ws'
 import { getFiles } from './get-files.js'
 
 const ONE_SECOND = 1000
-const TICK_RATE = 30 * ONE_SECOND
+const TICK_RATE = 1 * ONE_SECOND
 const SLEEP_TICK_RATE = ONE_SECOND * 60 * 5
 
 let lastStatus: null | StatusData = null
