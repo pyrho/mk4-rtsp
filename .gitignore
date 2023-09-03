@@ -1,4 +1,5 @@
 dist
+.task
 output
 .env
 .DS_Store

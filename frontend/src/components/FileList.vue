@@ -19,11 +19,11 @@ const openInNewTab = (url: string) => {
   </div>
   <ul>
     <li v-for="file in files">
-      <Button
+      <Link
         @click="openInNewTab(`http://mk4-rtsp.lan:2000/videos/${file}/timelapse.mp4`)"
         :label="'Job:' + file"
-        icon="pi pi-check"
-        iconPos="right"
+        link
+        size="small"
       />
     </li>
   </ul>

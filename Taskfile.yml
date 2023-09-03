@@ -1,0 +1,49 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  GREETING: Hello, World!
+
+tasks:
+  front:deps:
+    dir: ./frontend
+    cmds:
+      - npm i
+    sources:
+      - package.json
+
+  front:build:
+    dir: ./frontend
+    cmds:
+      - task: front:deps
+      - npm run build
+    sources:
+      - env.d.ts
+      - index.html
+      - public/*.*
+      - src/**/*.*
+      - tsconfig.app.json
+      - tsconfig.node.json
+      - vite.config.ts
+
+  meta:copy-front-to-back:
+    cmds:
+      - task: front:build
+      - cp -r ./frontend/dist ./backend/.
+    run: always
+
+  back:deps:
+    dir: ./backend
+    cmds:
+      - npm i
+    sources:
+      - package.json
+
+  back:serve:
+    dir: ./backend
+    cmds:
+      - task: meta:copy-front-to-back
+      - task: back:deps
+      - npx ts-node --esm src/index.ts
+

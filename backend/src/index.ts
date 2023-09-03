@@ -1,4 +1,6 @@
 import 'dotenv/config'
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 import { StatusData, getStatus } from './status.js'
 import { capture } from './capture.js'
 import { notify } from './notify.js'
@@ -8,9 +10,10 @@ import relay from 'rtsp-relay'
 import { log } from './utils.js'
 import expressWs from 'express-ws'
 import { getFiles } from './get-files.js'
+import cors from 'cors'
 
 const ONE_SECOND = 1000
-const TICK_RATE = 1 * ONE_SECOND
+const TICK_RATE = 2 * ONE_SECOND
 const SLEEP_TICK_RATE = ONE_SECOND * 60 * 5
 
 let lastStatus: null | StatusData = null
@@ -51,13 +54,14 @@ async function main() {
 
 function startWebServer() {
   const wsApp = expressWs(express())
+
   const app = wsApp.app
+  app.use(cors())
   const { proxy } = relay(app)
 
   app.ws(
     '/api/stream',
     proxy({
-        
       transport: 'tcp',
       url: process.env.RTSP_STREAM,
       verbose: false,
@@ -65,16 +69,12 @@ function startWebServer() {
   )
 
   app.get('/status', (_, res) => {
-      return getStatus().then(status => res.json(status))
+    return getStatus().then((status) => res.json(status))
   })
 
   app.get('/list', (_, res) => {
-      return getFiles().then(files => res.json(files)) 
+    return getFiles().then((files) => res.json(files))
   })
-
-  // app.get('/download/:id', (_, res) => {
-  //     // return res.download(`./output/${req.params.id}/timelapse.mp4`)
-  // })
 
   app.use(express.static('./dist'))
   app.use('/videos', express.static('./output'))

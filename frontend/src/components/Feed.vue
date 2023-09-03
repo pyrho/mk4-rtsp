@@ -26,7 +26,7 @@ defineProps<{
 
 <style scoped>
 canvas {
-  width: 500px;
+  width: 100%;
 }
 
 h1 {
